@@ -1,0 +1,100 @@
+1- create new project
+    * npm init
+2- install express and nodemon
+    * npm insatll express nodemon
+3- add "start" to your "scripts" in package.json file
+     * "scripts" : { .....,
+                    "start" : "nodemon app.js"
+                    }
+4- create app.js file
+5- edit your app.js import and excecute express
+    * const express = require('express')
+    * const app = express()
+5- edit your app.js and start listening the app
+    *  app.listen(3000)
+6- again edit your app.js and create your routes
+    * app.get('/' , ( req , res ) => { } )
+7- install mongoose to handle DataBase communication with mongoDB
+    * npm install mongoose
+8- install dotenv package to handle envirenement variables ( Database username and password)
+    * npm install dotenv
+9- edit your app.js import and excecute mongoose
+    * const mongoose = require("mongoose")
+10- edit your app.js and connect the app to mongoDB using mongoose
+    * mongoose.connect('mongodb://localhost:27017/nodejscourse',
+                { useNewUrlParser: true , useUnifiedTopology: true  },
+                ()=>{ console.log("connected to db")})
+11- create .env file and add DB_CONNECTION variable to it
+    * DB_CONNECTION =mongodb://localhost:27017/nodejscourse
+12- replace your connection string in app.js by DB_CONNECTION
+    *mongoose.connect(process.env.DB_CONNECTION,
+                { useNewUrlParser: true , useUnifiedTopology: true  },
+                ()=>{ console.log("connected to db")})
+13- create the routes folder to regroupe all routes in the app
+14- in your folder routes create a book.js file which contains all books routes
+15- edit book.js file again import express 
+     * const express = require('express')
+16- now to add route we should import router from express router
+     * const router = express.Router();
+17- now to add get route we should write like this
+    * router.get('/books',( req , res  )=>{ res.send('welcome to books page') })
+18- now we should export the router
+    * module.exports = router; 
+19- to use the route we should import it in our app.js using this code
+    * const booksRoute = require('./routes/book')
+20- now we should add a middleware books
+    * app.use('/books',booksRoute)
+21- now we should create a models folder why ? because we need models to communicate with Database
+22- now create in this folder , Book.js file
+23- edit this file and first import mongoose
+    * const mongoose = require('mongoose')
+24- and now we should create shema wich means how the data looks like for exemple our books contains
+        {
+            title : string ,
+            author : string ,
+            description : string ,
+            price : integer ,
+            date : date            
+        so , we will create BookSchema like this 
+    
+    * const BookSchema = mongoose.Schema({
+        title : {
+            type : String ,
+            required : true
+        },
+        author : {
+            type : String ,
+            required : true
+        },
+        description : {
+            type : String ,
+            required : true
+        },
+        price : {
+            type : Number ,
+            required : true
+        },
+        date : {
+            type : Date ,
+            required : true
+        },
+
+    })
+
+
+25- Now we should export the Schema using this code 
+    * module.exports = mongoose.model('Books',BookSchema)
+26- After doing all of this now , we are trying to add a new book so in our routes folder 
+    we will edit book.js and adding a specific  route to add new Book
+27- Edit book.js file in routes folder , first add the model Book by
+    * const Book = require('../models/Book');
+28- create AddRoute like this
+    * router.post('/add', ( req , res ) => {
+        console.log(req.body)
+
+    })
+29- unforthonely this will not work because we should install body-parser package
+    * npm install body-parser
+30- import and execute body-parser
+    * const bodyParser = require("body-parser")
+    * app.use('bodyParser.json())
